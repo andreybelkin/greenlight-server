@@ -1,0 +1,2 @@
+CREATE SCHEMA `greenlight` DEFAULT CHARACTER SET utf8 ;
+
