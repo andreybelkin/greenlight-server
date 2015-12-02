@@ -19,3 +19,31 @@ ADD CONSTRAINT `fk_comment_user`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
+CREATE TABLE `greenlight`.`event` (
+  `event_id` INT NOT NULL AUTO_INCREMENT,
+  `message` TEXT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`event_id`));
+
+ALTER TABLE `greenlight`.`comment`
+ADD COLUMN `event_id` INT NOT NULL AFTER `message`;
+
+ALTER TABLE `greenlight`.`comment`
+ADD INDEX `fk_comment_event_idx` (`event_id` ASC);
+ALTER TABLE `greenlight`.`comment`
+ADD CONSTRAINT `fk_comment_event`
+  FOREIGN KEY (`event_id`)
+  REFERENCES `greenlight`.`event` (`event_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+CREATE TABLE `greenlight`.`street` (
+  `street_id` INT NOT NULL AUTO_INCREMENT,
+  `street_name` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`street_id`));
+
+CREATE TABLE `greenlight`.`channel` (
+  `channel_id` INT NOT NULL AUTO_INCREMENT,
+  `channel_name` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`channel_id`));
+
