@@ -98,3 +98,8 @@ ADD CONSTRAINT `fk_ucs_street`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
+ALTER TABLE `greenlight`.`event`
+ADD COLUMN `longitude` DOUBLE NULL AFTER `user_id`,
+ADD COLUMN `latitude` DOUBLE NULL AFTER `altitude`;
+
+

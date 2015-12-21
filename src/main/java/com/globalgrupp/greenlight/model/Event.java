@@ -36,6 +36,29 @@ public class Event {
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "event")
     private Set<Comment> comments=new HashSet<Comment>(0);
 
+
+    @Column(name="longitude")
+    private double longitude;
+
+    @Column(name="latitude")
+    private double latitude;
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double altitude) {
+        this.longitude = altitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
     public Long getId() {
         return id;
     }
