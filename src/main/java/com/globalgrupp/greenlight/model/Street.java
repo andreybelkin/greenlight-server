@@ -24,12 +24,12 @@ public class Street {
     private String name;
 
     @ManyToMany(mappedBy = "streets")
-    @JsonBackReference
+    @JsonBackReference(value="channels")
     private Set<Channel> channels=new HashSet<Channel>(0);
 
 
     @ManyToMany(mappedBy = "streets")
-    @JsonBackReference
+    @JsonBackReference(value = "userChannels")
     private Set<UserChannel> userChannels=new HashSet<UserChannel>(0);
 
     public Set<Channel> getChannels() {

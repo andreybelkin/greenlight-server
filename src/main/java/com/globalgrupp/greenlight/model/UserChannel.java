@@ -25,7 +25,7 @@ public class UserChannel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
-    @JsonBackReference
+    @JsonBackReference(value="user_id")
     private User user;
 
     @ManyToMany(cascade = CascadeType.ALL)

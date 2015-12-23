@@ -21,9 +21,9 @@ public class Event {
     @Column(name="message")
     private String message;
 
-    @ManyToOne()
-    @JoinColumn(name="user_id")
-    private User user;
+//    @ManyToOne()
+//    @JoinColumn(name="user_id")
+//    private User user;
 
     public Set<Comment> getComments() {
         return comments;
@@ -37,18 +37,29 @@ public class Event {
     private Set<Comment> comments=new HashSet<Comment>(0);
 
 
-    @Column(name="longitude")
-    private double longitude;
+    @Column(name="longtitude")
+    private double longtitude;
 
     @Column(name="latitude")
     private double latitude;
 
-    public double getLongitude() {
-        return longitude;
+    @Column(name="altitude")
+    private double altitude;
+
+    public double getAltitude() {
+        return altitude;
     }
 
-    public void setLongitude(double altitude) {
-        this.longitude = altitude;
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
+    }
+
+    public double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        this.longtitude = longtitude;
     }
 
     public double getLatitude() {
@@ -75,13 +86,13 @@ public class Event {
         this.message = message;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public Event() {
     }

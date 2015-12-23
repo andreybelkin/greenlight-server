@@ -18,7 +18,7 @@ import java.util.Collection;
 @RequestMapping("/test")
 public class TestRestController {
 
-    @RequestMapping(value="/testMethod",method= RequestMethod.GET)
+    @RequestMapping(value="/testMethod",method= RequestMethod.POST)
     Collection<String> getSmth(){
         Collection<String> res=new ArrayList<>(2);
         res.add("adsfadf");

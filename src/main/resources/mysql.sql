@@ -100,6 +100,9 @@ ADD CONSTRAINT `fk_ucs_street`
 
 ALTER TABLE `greenlight`.`event`
 ADD COLUMN `longitude` DOUBLE NULL AFTER `user_id`,
-ADD COLUMN `latitude` DOUBLE NULL AFTER `altitude`;
+ADD COLUMN `latitude` DOUBLE NULL AFTER `longitude`;
+
+ALTER TABLE `greenlight`.`event`
+ADD COLUMN `altitude` DOUBLE NULL AFTER `latitude`;
 
 

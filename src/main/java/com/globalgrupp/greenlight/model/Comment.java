@@ -1,6 +1,7 @@
 package com.globalgrupp.greenlight.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,6 +28,17 @@ public class Comment {
 
     @Column(name="message")
     private String message;
+
+    @Column(name="create_date")
+    private Date createDate;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     public Comment() {
     }

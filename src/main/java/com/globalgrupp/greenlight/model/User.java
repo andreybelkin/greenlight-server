@@ -18,8 +18,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "user")
     private Set<UserChannel> userChannels=new HashSet<UserChannel>(0);
 
