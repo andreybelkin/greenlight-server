@@ -27,11 +27,14 @@ public class EventController {
         //session.close();
     }
 
-    @RequestMapping(value="/getNearestEvents",method= RequestMethod.GET)
+    @RequestMapping(value="/getNearestEvents",method= RequestMethod.POST)
     List<Event> getEventsByStreet(@RequestBody SimpleGeoCoords coords){
         //todo find events by coords;
         Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query= session.createQuery("from Event where ");
+        Query query= session.createQuery("from Event where longitude-1<=:longitude and longitude+1>:longitude " +
+                " and latitude-1<=:latitude and latitude+1>=:latitude");
+        query.setParameter("longitude",coords.getLongitude());
+        query.setParameter("latitude",coords.getLatitude());
         //session.close();
         List<Event> result=query.list();
         return result;
