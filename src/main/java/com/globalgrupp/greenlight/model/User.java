@@ -21,8 +21,8 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "user")
     private Set<UserChannel> userChannels=new HashSet<UserChannel>(0);
 
-    @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "user")
-    private Set<Event> events=new HashSet<Event>(0);
+//    @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "user")
+//    private Set<Event> events=new HashSet<Event>(0);
 
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "user")
     private Set<Comment> comments=new HashSet<Comment>(0);
@@ -35,13 +35,13 @@ public class User {
         this.comments = comments;
     }
 
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
+//    public Set<Event> getEvents() {
+//        return events;
+//    }
+//
+//    public void setEvents(Set<Event> events) {
+//        this.events = events;
+//    }
 
     public Set<UserChannel> getUserChannels() {
         return userChannels;

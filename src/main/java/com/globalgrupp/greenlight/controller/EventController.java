@@ -18,11 +18,12 @@ import java.util.List;
 public class EventController {
 
     @RequestMapping(value="/createEvent",method= RequestMethod.POST)
-    void createEvent(@RequestBody Event event){
+    boolean createEvent(@RequestBody Event event){
         Session session= HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         session.save(event);
         session.getTransaction().commit();
+        return true;//
         //session.close();
     }
 

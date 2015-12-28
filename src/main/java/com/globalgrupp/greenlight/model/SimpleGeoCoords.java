@@ -1,9 +1,11 @@
 package com.globalgrupp.greenlight.model;
 
+import java.io.Serializable;
+
 /**
  * Created by п on 24.12.2015.
  */
-public class SimpleGeoCoords {
+public class SimpleGeoCoords implements Serializable {
     private double longtitude;
 
     private double latitude;

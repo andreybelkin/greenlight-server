@@ -25,6 +25,17 @@ public class Event {
 //    @JoinColumn(name="user_id")
 //    private User user;
 
+    @Column(name = "user_id")
+    private Long temp_user=new Long(1);
+
+    public Long getTemp_user() {
+        return temp_user;
+    }
+
+    public void setTemp_user(Long temp_user) {
+        this.temp_user = temp_user;
+    }
+
     public Set<Comment> getComments() {
         return comments;
     }
@@ -37,8 +48,8 @@ public class Event {
     private Set<Comment> comments=new HashSet<Comment>(0);
 
 
-    @Column(name="longtitude")
-    private double longtitude;
+    @Column(name="longitude")
+    private double longitude;
 
     @Column(name="latitude")
     private double latitude;
@@ -54,12 +65,12 @@ public class Event {
         this.altitude = altitude;
     }
 
-    public double getLongtitude() {
-        return longtitude;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLongtitude(double longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public double getLatitude() {
