@@ -1,5 +1,7 @@
 package com.globalgrupp.greenlight.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -20,10 +22,12 @@ public class Comment {
 
     @ManyToOne()
     @JoinColumn(name="user_id")
+    @JsonBackReference(value = "user")
     private User user;
 
     @ManyToOne()
     @JoinColumn(name="event_id")
+    @JsonBackReference(value = "event")
     private Event event;
 
     @Column(name="message")
