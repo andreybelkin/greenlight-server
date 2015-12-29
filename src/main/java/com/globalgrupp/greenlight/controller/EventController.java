@@ -54,6 +54,7 @@ public class EventController {
     void addComment(@RequestBody Comment comment){
         comment.setCreateDate(new Date());
         Session session= HibernateUtil.getSessionFactory().openSession();
+        comment.setUser((User)session.get(User.class,new Long(1)));//// TODO: 29.12.2015 нормальный юзер
         session.beginTransaction();
         session.save(comment);
         session.getTransaction().commit();
