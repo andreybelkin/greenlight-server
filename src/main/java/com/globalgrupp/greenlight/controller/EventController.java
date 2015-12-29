@@ -69,6 +69,13 @@ public class EventController {
         return result;
     }
 
-
-
+    @RequestMapping(value="/getEvent",method= RequestMethod.POST)
+    List<Event> getEvent(Long eventId){
+        Session session= HibernateUtil.getSessionFactory().openSession();
+        Query query= session.createQuery("from Event where event_id=:event_id");
+        query.setParameter("event_id",eventId);
+        //session.close();
+        List<Event> result=query.list();
+        return result;
+    }
 }
