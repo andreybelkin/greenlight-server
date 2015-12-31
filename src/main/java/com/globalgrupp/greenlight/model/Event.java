@@ -57,6 +57,17 @@ public class Event {
     @Column(name="altitude")
     private double altitude;
 
+    @Column(name="audio_id")
+    private Long audioId;
+
+    public Long getAudioId() {
+        return audioId;
+    }
+
+    public void setAudioId(Long audioId) {
+        this.audioId = audioId;
+    }
+
     public double getAltitude() {
         return altitude;
     }

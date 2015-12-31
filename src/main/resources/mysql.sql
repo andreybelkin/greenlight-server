@@ -105,4 +105,14 @@ ADD COLUMN `latitude` DOUBLE NULL AFTER `longitude`;
 ALTER TABLE `greenlight`.`event`
 ADD COLUMN `altitude` DOUBLE NULL AFTER `latitude`;
 
+CREATE TABLE `greenlight`.`files` (
+  `files_id` INT NOT NULL AUTO_INCREMENT,
+  `files_data` BLOB ,
+  PRIMARY KEY (`files_id`));
+
+ALTER TABLE `greenlight`.`event`
+ADD COLUMN `audio_id` INT(11) NULL AFTER `altitude`;
+
+
+
 
