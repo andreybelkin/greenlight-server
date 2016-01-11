@@ -113,6 +113,10 @@ CREATE TABLE `greenlight`.`files` (
 ALTER TABLE `greenlight`.`event`
 ADD COLUMN `audio_id` INT(11) NULL AFTER `altitude`;
 
+ALTER TABLE `greenlight`.`comment`
+ADD COLUMN `create_date` DATETIME NULL AFTER `event_id`;
+
+
 
 
 
