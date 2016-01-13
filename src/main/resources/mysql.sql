@@ -116,6 +116,23 @@ ADD COLUMN `audio_id` INT(11) NULL AFTER `altitude`;
 ALTER TABLE `greenlight`.`comment`
 ADD COLUMN `create_date` DATETIME NULL AFTER `event_id`;
 
+ALTER TABLE `greenlight`.`event`
+ADD COLUMN `photo_id` INT NULL AFTER `audio_id`,
+ADD COLUMN `video_id` INT NULL AFTER `photo_id`;
+
+ALTER TABLE `greenlight`.`files`
+CHANGE COLUMN `files_data` `files_data` LONGBLOB NULL DEFAULT NULL ;
+
+ALTER TABLE `greenlight`.`street`
+ADD UNIQUE INDEX `street_name_UNIQUE` (`street_name` ASC);
+
+ALTER TABLE `greenlight`.`event`
+ADD COLUMN `first_street_id` INT(11) NULL AFTER `video_id`,
+ADD COLUMN `second_street_id` INT(11) NULL AFTER `first_street_id`,
+ADD COLUMN `create_date` DATETIME NULL AFTER `second_street_id`;
+
+
+
 
 
 

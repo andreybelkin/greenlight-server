@@ -21,6 +21,19 @@ public class EventController {
     boolean createEvent(@RequestBody Event event){
         Session session= HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
+        Date dt=new Date();
+        event.setCreateDate(dt);
+        String streetName= event.getStreetName();
+        Query query= session.createQuery("from Street where street_name=:streetName ");
+        query.setParameter("streetName",streetName);
+        List<Street> streets=query.list();
+        if (streets.size()==0){
+            Street newStreet=new Street(streetName);
+            session.save(newStreet);
+            event.setFirstStreet(newStreet);
+        } else {
+            event.setFirstStreet(streets.get(0));
+        }
         session.save(event);
         session.getTransaction().commit();
         return true;//
@@ -31,13 +44,20 @@ public class EventController {
     List<Event> getEventsByStreet(@RequestBody SimpleGeoCoords coords){
         //todo find events by coords;
         Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query= session.createQuery("from Event ");
+        Query query= session.createQuery("from Event order by create_date desc");
 //        where longitude-1<=:longitude and longitude+1>:longitude " +
 //                " and latitude-1<=:latitude and latitude+1>=:latitude");
 //        query.setParameter("longitude",coords.getLongitude());
 //        query.setParameter("latitude",coords.getLatitude());
         //session.close();
         List<Event> result=query.list();
+        for (Event res :
+                result) {
+            if (res.getFirstStreet()!=null){
+                res.setStreetName(res.getFirstStreet().getName());
+            }
+
+        }
         return result;
     }
 
@@ -78,6 +98,12 @@ public class EventController {
         query.setParameter("event_id",eventId);
         //session.close();
         List<Event> result=query.list();
+        for (Event res :
+                result) {
+            if (res.getFirstStreet()!=null){
+                res.setStreetName(res.getFirstStreet().getName());
+            }
+        }
         return result;
     }
 }

@@ -1,6 +1,7 @@
 package com.globalgrupp.greenlight.model;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,6 +61,76 @@ public class Event {
     @Column(name="audio_id")
     private Long audioId;
 
+    @Column(name="photo_id")
+    private Long photoId;
+
+    @Column(name="video_id")
+    private Long videoId;
+
+    @ManyToOne()
+    @JoinColumn(name="first_street_id")
+    private Street firstStreet;
+
+    @Transient
+    private String streetName;
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    @ManyToOne()
+    @JoinColumn(name="second_street_id")
+    private Street secondStreet;
+
+    public Street getFirstStreet() {
+        return firstStreet;
+    }
+
+    public void setFirstStreet(Street firstStreet) {
+        this.firstStreet = firstStreet;
+    }
+
+    public Street getSecondStreet() {
+        return secondStreet;
+    }
+
+    public void setSecondStreet(Street secondStreet) {
+        this.secondStreet = secondStreet;
+    }
+
+    @Column(name="create_date")
+    private Date createDate;
+
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Long getPhotoId() {
+        return photoId;
+
+    }
+
+    public void setPhotoId(Long photoId) {
+        this.photoId = photoId;
+    }
+
+    public Long getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
+    }
+
     public Long getAudioId() {
         return audioId;
     }
@@ -115,6 +186,8 @@ public class Event {
 //    public void setUser(User user) {
 //        this.user = user;
 //    }
+
+
 
     public Event() {
     }
