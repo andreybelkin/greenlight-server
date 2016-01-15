@@ -46,6 +46,7 @@ public class Event {
     }
 
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "event")
+    @OrderBy("create_date DESC")
     private Set<Comment> comments=new HashSet<Comment>(0);
 
 
