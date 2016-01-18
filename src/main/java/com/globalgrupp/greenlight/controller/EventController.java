@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by п on 21.12.2015.
@@ -61,13 +62,24 @@ public class EventController {
         return result;
     }
 
-    @RequestMapping(value="/getEventsByChannel",method= RequestMethod.GET)
-    List<Event> getEventsByChannels(@RequestBody Channel channel){
+    @RequestMapping(value="/getEventsByChannel/{channelId}",method= RequestMethod.POST)
+    List<Event> getEventsByChannels( @PathVariable("channelId")Long channelId){
         //todo find events by channel;
         Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query= session.createQuery("from Event where ");
-        //session.close();
-        List<Event> result=new ArrayList<>();
+        Channel channel=(Channel)session.get(Channel.class,channelId);
+
+        List<Street> streets = new ArrayList<Street>(channel.getStreets());
+//        String str="";
+        List<Long> qwerty=new ArrayList<>();
+        List<Event> result=new ArrayList<Event>();
+        for (int i=0;i<streets.size();i++) {
+            qwerty.add(streets.get(i).getId());
+            Query query= session.createQuery("from Event where first_street_id in (:streetList)  ");
+            query.setParameter("streetList",streets.get(i).getId());
+            result.addAll(query.list());
+        }
+        //str=str.substring(0,str.length()-1);
+
         return result;
     }
 

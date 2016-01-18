@@ -20,6 +20,10 @@ public class Street {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Long getId() {
+        return id;
+    }
+
     @Column(name="street_name")
     private String name;
 
