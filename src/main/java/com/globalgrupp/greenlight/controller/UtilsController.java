@@ -3,6 +3,7 @@ package com.globalgrupp.greenlight.controller;
 import com.globalgrupp.greenlight.model.LoadedFile;
 import com.globalgrupp.greenlight.util.HibernateUtil;
 import org.apache.commons.io.IOUtils;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,16 @@ public Long convert(InputStream file){
             //log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
             throw new RuntimeException("IOError writing file to output stream");
         }
+
+    }
+
+
+    @RequestMapping(value="/savePushAppId", method=RequestMethod.PUT)
+    public void savePushAppId(@PathVariable("file_name") String pushAppId){
+        Session session= HibernateUtil.getSessionFactory().openSession();
+        Query query=session.createQuery("from user where push_app_id=:pushAppId");
+
+        query.list();
 
     }
 

@@ -61,4 +61,15 @@ public class User {
 
     public User() {
     }
+
+    @Column(name="push_app_id")
+    private String pushAppId;
+
+    public String getPushAppId() {
+        return pushAppId;
+    }
+
+    public void setPushAppId(String pushAppId) {
+        this.pushAppId = pushAppId;
+    }
 }

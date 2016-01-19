@@ -18,11 +18,12 @@ import java.util.Collection;
 @RequestMapping("/test")
 public class TestRestController {
 
-    @RequestMapping(value="/testMethod",method= RequestMethod.POST)
+    @RequestMapping(value="/testMethod",method= RequestMethod.GET)
     Collection<String> getSmth(){
         Collection<String> res=new ArrayList<>(2);
         res.add("adsfadf");
         res.add("adsfadfasdfadf");
+
         return res;
     }
     @RequestMapping(value="/getChannel",method= RequestMethod.GET)

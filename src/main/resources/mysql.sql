@@ -131,6 +131,10 @@ ADD COLUMN `first_street_id` INT(11) NULL AFTER `video_id`,
 ADD COLUMN `second_street_id` INT(11) NULL AFTER `first_street_id`,
 ADD COLUMN `create_date` DATETIME NULL AFTER `second_street_id`;
 
+ALTER TABLE `greenlight`.`user`
+ADD COLUMN `push_app_id` VARCHAR(200) NULL AFTER `user_id`;
+
+
 
 
 
