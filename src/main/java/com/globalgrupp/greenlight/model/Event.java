@@ -83,6 +83,17 @@ public class Event {
         this.streetName = streetName;
     }
 
+    @Transient
+    private String senderAppId;
+
+    public String getSenderAppId() {
+        return senderAppId;
+    }
+
+    public void setSenderAppId(String senderAppId) {
+        this.senderAppId = senderAppId;
+    }
+
     @ManyToOne()
     @JoinColumn(name="second_street_id")
     private Street secondStreet;

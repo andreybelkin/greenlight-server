@@ -1,6 +1,7 @@
 package com.globalgrupp.greenlight.controller;
 
 import com.globalgrupp.greenlight.model.LoadedFile;
+import com.globalgrupp.greenlight.model.User;
 import com.globalgrupp.greenlight.util.HibernateUtil;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * Created by п on 31.12.2015.
@@ -60,13 +62,23 @@ public Long convert(InputStream file){
     }
 
 
-    @RequestMapping(value="/savePushAppId", method=RequestMethod.PUT)
-    public void savePushAppId(@PathVariable("file_name") String pushAppId){
+    @RequestMapping(value="/savePushAppId/{appId}", method=RequestMethod.POST)
+    public void savePushAppId(@PathVariable("appId") String pushAppId){
         Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query=session.createQuery("from user where push_app_id=:pushAppId");
-
-        query.list();
+        Query query=session.createQuery("from User where push_app_id=:pushAppId");
+        query.setParameter("pushAppId",pushAppId);
+        List<User> users=query.list();
+        User fUser;
+        if (users.size()==1){
+            fUser=users.get(0);
+            //такой ключ уже есть
+        } else {
+            fUser=new User();
+            fUser.setPushAppId(pushAppId);
+            session.beginTransaction();
+            session.save(fUser);
+            session.getTransaction().commit();
+        }
 
     }
-
 }

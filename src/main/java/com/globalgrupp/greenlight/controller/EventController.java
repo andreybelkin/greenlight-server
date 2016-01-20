@@ -3,6 +3,7 @@ package com.globalgrupp.greenlight.controller;
 import com.globalgrupp.greenlight.model.*;
 import com.globalgrupp.greenlight.util.HibernateUtil;
 import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.MulticastResult;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import org.hibernate.Query;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -44,16 +46,33 @@ public class EventController {
         }
         session.save(event);
         session.getTransaction().commit();
-        try{
-            Sender sender = new Sender("AIzaSyAQMtP-p4i2oV-OlVteDv5sW_l50uxFMiI");
-            Message message = new Message.Builder()
-                    .addData("message",event.getMessage())
-                    .addData("eventId",event.getId().toString())
-                    .build();
-            Result result = sender.send(message, "APA91bGPbztk5SKI4yn2PB8_Nz1sje_LPX3BqUr-2HMup2_aRKwg76IREYxvgMvpngvuRjEzixOpNjfcyhnaVKdsMD-MxiXTgMzBdtHf0cNlT-XXabkWOFd4-CSaju6rXtGz9sWd4td5bVRtaloTqyEZqK65gOzrWQ", 5);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        Query usersQuery= session.createQuery("from User");
+        final List<User> users=usersQuery.list();
+        Thread thread = new Thread(){
+            public void run(){
+                try{
+                    Sender sender = new Sender("AIzaSyAQMtP-p4i2oV-OlVteDv5sW_l50uxFMiI");
+                    Message message = new Message.Builder()
+                            .addData("message",event.getMessage())
+                            .addData("eventId",event.getId().toString())
+                            .build();
+                    List<String> usersList=new ArrayList<String>();
+                    for(int i=0;i<users.size();i++){
+                        String pushAppid=users.get(i).getPushAppId();
+                        //не добавляем в рассылку отправителя
+                        if (pushAppid!=null && !pushAppid.isEmpty() && !pushAppid.equals(event.getSenderAppId())){
+                            usersList.add(users.get(i).getPushAppId());
+                        }
+                    }
+                    MulticastResult result = sender.send(message, usersList, 5);
+
+                } catch (Exception e){
+                    e.printStackTrace();
+
+                }
+            }
+        };
+        thread.start();
 
         return true;//
         //session.close();
