@@ -134,6 +134,23 @@ ADD COLUMN `create_date` DATETIME NULL AFTER `second_street_id`;
 ALTER TABLE `greenlight`.`user`
 ADD COLUMN `push_app_id` VARCHAR(200) NULL AFTER `user_id`;
 
+CREATE TABLE `greenlight`.`event_photo` (
+  `idevent_photo` INT NOT NULL AUTO_INCREMENT,
+  `event_id` INT NOT NULL,
+  `photo_id` INT NOT NULL,
+  PRIMARY KEY (`idevent_photo`),
+  UNIQUE INDEX `idevent_photo_UNIQUE` (`idevent_photo` ASC));
+
+ALTER TABLE `greenlight`.`event_photo`
+ADD INDEX `fk_event_event_photo_idx` (`event_id` ASC);
+ALTER TABLE `greenlight`.`event_photo`
+ADD CONSTRAINT `fk_event_event_photo`
+  FOREIGN KEY (`event_id`)
+  REFERENCES `greenlight`.`event` (`event_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
 
 
 

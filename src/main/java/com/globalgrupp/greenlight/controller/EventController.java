@@ -73,7 +73,6 @@ public class EventController {
             }
         };
         thread.start();
-
         return true;//
         //session.close();
     }

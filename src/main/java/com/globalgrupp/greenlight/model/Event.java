@@ -3,6 +3,7 @@ package com.globalgrupp.greenlight.model;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -117,6 +118,19 @@ public class Event {
     @Column(name="create_date")
     private Date createDate;
 
+
+    @ElementCollection
+    @CollectionTable(name="event_photo", joinColumns=@JoinColumn(name="event_id"))
+    @Column(name="photo_id")
+    private List<Long> photoIds;
+
+    public List<Long> getPhotoIds() {
+        return photoIds;
+    }
+
+    public void setPhotoIds(List<Long> photoIds) {
+        this.photoIds = photoIds;
+    }
 
     public Date getCreateDate() {
         return createDate;

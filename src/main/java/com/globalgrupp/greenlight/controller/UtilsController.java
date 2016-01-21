@@ -79,6 +79,25 @@ public Long convert(InputStream file){
             session.save(fUser);
             session.getTransaction().commit();
         }
-
     }
+    @RequestMapping(value="/savePushAppId/oldId={oldAppId}&newId={newAppId}", method=RequestMethod.GET)
+    public void updatePushAppId(@PathVariable("oldAppId") String oldAppId, @PathVariable("newAppId") String newAppId){
+        Session session= HibernateUtil.getSessionFactory().openSession();
+        Query query=session.createQuery("from User where push_app_id=:pushAppId");
+        query.setParameter("pushAppId",oldAppId);
+        List<User> users=query.list();
+        User fUser;
+        if (users.size()==1){
+            fUser=users.get(0);
+            fUser.setPushAppId(newAppId);
+            //такой ключ уже есть
+        } else {
+            fUser=new User();
+            fUser.setPushAppId(newAppId);
+        }
+        session.beginTransaction();
+        session.save(fUser);
+        session.getTransaction().commit();
+    }
+
 }
