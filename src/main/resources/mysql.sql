@@ -150,6 +150,24 @@ ADD CONSTRAINT `fk_event_event_photo`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
+ALTER TABLE `greenlight`.`comment`
+ADD COLUMN `audio_id` INT NULL AFTER `create_date`,
+ADD COLUMN `video_id` INT NULL AFTER `audio_id`;
+
+CREATE TABLE `greenlight`.`comment_photo` (
+  `idcomment_photo` INT NOT NULL AUTO_INCREMENT,
+  `comment_id` INT NOT NULL,
+  `photo_id` INT NOT NULL,
+  PRIMARY KEY (`idcomment_photo`),
+  UNIQUE INDEX `idcomment_photo_UNIQUE` (`idcomment_photo` ASC),
+  INDEX `comment_id_comment_photo_idx` (`comment_id` ASC),
+  CONSTRAINT `comment_id_comment_photo`
+    FOREIGN KEY (`comment_id`)
+    REFERENCES `greenlight`.`comment` (`comment_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+
 
 
 

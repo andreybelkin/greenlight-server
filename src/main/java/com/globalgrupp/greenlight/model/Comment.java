@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +36,43 @@ public class Comment {
 
     @Column(name="create_date")
     private Date createDate;
+
+    @Column(name="audio_id")
+    private Long audioId;
+
+    public Long getAudioId() {
+        return audioId;
+    }
+
+    public void setAudioId(Long audioId) {
+        this.audioId = audioId;
+    }
+
+    public List<Long> getPhotoIds() {
+        return photoIds;
+    }
+
+    public void setPhotoIds(List<Long> photoIds) {
+        this.photoIds = photoIds;
+    }
+
+    public Long getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
+    }
+
+    @ElementCollection
+    @CollectionTable(name="comment_photo", joinColumns=@JoinColumn(name="comment_id"))
+    @Column(name="photo_id")
+    private List<Long> photoIds;
+
+    @Column(name="video_id")
+    private Long videoId;
+
+
 
     public Date getCreateDate() {
         return createDate;
