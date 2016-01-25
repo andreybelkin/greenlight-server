@@ -44,4 +44,14 @@ public class SimpleGeoCoords implements Serializable {
 
     public SimpleGeoCoords() {
     }
+
+    private Long radius;
+
+    public Long getRadius() {
+        return radius;
+    }
+
+    public void setRadius(Long radius) {
+        this.radius = radius;
+    }
 }

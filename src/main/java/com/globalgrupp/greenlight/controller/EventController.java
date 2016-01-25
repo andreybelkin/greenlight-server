@@ -2,6 +2,7 @@ package com.globalgrupp.greenlight.controller;
 
 import com.globalgrupp.greenlight.model.*;
 import com.globalgrupp.greenlight.util.HibernateUtil;
+import com.globalgrupp.greenlight.util.SomeUtils;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.MulticastResult;
 import com.google.android.gcm.server.Result;
@@ -15,10 +16,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by п on 21.12.2015.
@@ -44,6 +42,16 @@ public class EventController {
         } else {
             event.setFirstStreet(streets.get(0));
         }
+        Query ownerUserQuery= session.createQuery("from User where push_app_id=:pushAppId");
+        ownerUserQuery.setParameter("pushAppId",event.getSenderAppId());
+        List<User> ownerUser=ownerUserQuery.list();
+        if (ownerUser.size()>0){
+            User owner=ownerUser.get(0);
+            event.setUser(owner);
+        } else{
+            //wtf
+        }
+
         session.save(event);
         session.getTransaction().commit();
         Query usersQuery= session.createQuery("from User");
@@ -60,7 +68,7 @@ public class EventController {
                     for(int i=0;i<users.size();i++){
                         String pushAppid=users.get(i).getPushAppId();
                         //не добавляем в рассылку отправителя
-                        if (pushAppid!=null && !pushAppid.isEmpty() && !pushAppid.equals(event.getSenderAppId())){
+                        if (pushAppid!=null && !pushAppid.isEmpty() /*&& !pushAppid.equals(event.getSenderAppId())*/){
                             usersList.add(users.get(i).getPushAppId());
                         }
                     }
@@ -86,18 +94,28 @@ public class EventController {
         //todo find events by coords;
         Session session= HibernateUtil.getSessionFactory().openSession();
         Query query= session.createQuery("from Event order by create_date desc");
+
 //        where longitude-1<=:longitude and longitude+1>:longitude " +
 //                " and latitude-1<=:latitude and latitude+1>=:latitude");
 //        query.setParameter("longitude",coords.getLongitude());
 //        query.setParameter("latitude",coords.getLatitude());
         //session.close();
         List<Event> result=query.list();
-        for (Event res :
-                result) {
-            if (res.getFirstStreet()!=null){
+//        for (Event res : result) {
+//            if (res.getFirstStreet()!=null){
+//                res.setStreetName(res.getFirstStreet().getName());
+//            }
+//
+//
+//        }
+        Iterator<Event> iter = result.iterator();
+        while(iter.hasNext()){
+            Event res=iter.next();
+            if (coords.getRadius()*1000<= SomeUtils.distFrom(coords.getLatitude(),coords.getLongitude(),res.getLatitude(),res.getLongitude())){
+                iter.remove();
+            }else if (res.getFirstStreet()!=null){
                 res.setStreetName(res.getFirstStreet().getName());
             }
-
         }
         return result;
     }

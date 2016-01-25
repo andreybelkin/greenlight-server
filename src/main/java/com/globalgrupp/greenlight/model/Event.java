@@ -23,20 +23,28 @@ public class Event {
     @Column(name="message")
     private String message;
 
-//    @ManyToOne()
-//    @JoinColumn(name="user_id")
-//    private User user;
+    @ManyToOne()
+    @JoinColumn(name="user_id")
+    private User user;
 
-    @Column(name = "user_id")
-    private Long temp_user=new Long(1);
-
-    public Long getTemp_user() {
-        return temp_user;
+    public User getUser() {
+        return user;
     }
 
-    public void setTemp_user(Long temp_user) {
-        this.temp_user = temp_user;
+    public void setUser(User user) {
+        this.user = user;
     }
+
+//    @Column(name = "user_id")
+//    private Long temp_user=new Long(1);
+
+//    public Long getTemp_user() {
+//        return temp_user;
+//    }
+//
+//    public void setTemp_user(Long temp_user) {
+//        this.temp_user = temp_user;
+//    }
 
     public Set<Comment> getComments() {
         return comments;
@@ -204,15 +212,6 @@ public class Event {
     public void setMessage(String message) {
         this.message = message;
     }
-
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-
 
 
     public Event() {
