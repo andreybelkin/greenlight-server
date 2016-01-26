@@ -68,7 +68,7 @@ public class EventController {
                     for(int i=0;i<users.size();i++){
                         String pushAppid=users.get(i).getPushAppId();
                         //не добавляем в рассылку отправителя
-                        if (pushAppid!=null && !pushAppid.isEmpty() /*&& !pushAppid.equals(event.getSenderAppId())*/){
+                        if (pushAppid!=null && !pushAppid.isEmpty() && !pushAppid.equals(event.getSenderAppId())){
                             usersList.add(users.get(i).getPushAppId());
                         }
                     }
@@ -93,8 +93,13 @@ public class EventController {
     List<Event> getEventsByStreet(@RequestBody SimpleGeoCoords coords){
         //todo find events by coords;
         Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query= session.createQuery("from Event order by create_date desc");
 
+        Calendar cal = Calendar.getInstance(); // creates calendar
+        cal.setTime(new Date()); // sets calendar time/date
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date dt=cal.getTime();
+        Query query= session.createQuery("from Event where create_date>:dt order by create_date desc");
+        query.setParameter("dt",dt);
 //        where longitude-1<=:longitude and longitude+1>:longitude " +
 //                " and latitude-1<=:latitude and latitude+1>=:latitude");
 //        query.setParameter("longitude",coords.getLongitude());
@@ -131,13 +136,25 @@ public class EventController {
         List<Long> qwerty=new ArrayList<>();
         List<Event> result=new ArrayList<Event>();
         //todo optimize
+        Calendar cal = Calendar.getInstance(); // creates calendar
+        cal.setTime(new Date()); // sets calendar time/date
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        Date dt=cal.getTime();
         for (int i=0;i<streets.size();i++) {
             qwerty.add(streets.get(i).getId());
-            Query query= session.createQuery("from Event where first_street_id in (:streetList)  ");
+            Query query= session.createQuery("from Event where create_date>:dt and first_street_id in (:streetList)  ");
             query.setParameter("streetList",streets.get(i).getId());
+            query.setParameter("dt",dt);
             result.addAll(query.list());
         }
 
+        Iterator<Event> iter = result.iterator();
+        while(iter.hasNext()){
+            Event res=iter.next();
+            if (res.getFirstStreet()!=null){
+                res.setStreetName(res.getFirstStreet().getName());
+            }
+        }
         //str=str.substring(0,str.length()-1);
 
         return result;
@@ -164,14 +181,30 @@ public class EventController {
     }
 
     @RequestMapping(value="/getEvent",method= RequestMethod.POST)
-    List<Event> getEvent(Long eventId){
+    List<Event> getEvent(@RequestBody EventFilter filter){
         Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query= session.createQuery("from Event where event_id=:event_id");
-        query.setParameter("event_id",eventId);
-        //session.close();
-        List<Event> result=query.list();
-        for (Event res :
-                result) {
+        String queryStr="from Event where event_id=:event_id";
+        if (filter.getChannelId()!=null && !filter.getChannelId().equals(new Long(0))){
+            queryStr+=" and first_street_id in (:streetList)";
+        }
+        List<Event> result=new ArrayList<Event>();
+        Query query= session.createQuery(queryStr);
+        query.setParameter("event_id",filter.getEventId());
+        if (filter.getChannelId()!=null && !filter.getChannelId().equals(new Long(0))){
+            Channel channel=(Channel)session.get(Channel.class,filter.getChannelId());
+            List<Street> streets = new ArrayList<Street>(channel.getStreets());
+            //todo optimize
+            for (int i=0;i<streets.size();i++) {
+                Query query2= session.createQuery(queryStr);
+                query2.setParameter("event_id",filter.getEventId());
+                query2.setParameter("streetList",streets.get(i).getId());
+                result.addAll(query2.list());
+            }
+        }else{
+            result=query.list();
+        }
+
+        for (Event res :  result) {
             if (res.getFirstStreet()!=null){
                 res.setStreetName(res.getFirstStreet().getName());
             }
