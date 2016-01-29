@@ -35,17 +35,6 @@ public class Event {
         this.user = user;
     }
 
-//    @Column(name = "user_id")
-//    private Long temp_user=new Long(1);
-
-//    public Long getTemp_user() {
-//        return temp_user;
-//    }
-//
-//    public void setTemp_user(Long temp_user) {
-//        this.temp_user = temp_user;
-//    }
-
     public Set<Comment> getComments() {
         return comments;
     }
