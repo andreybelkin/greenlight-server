@@ -2,6 +2,7 @@ package com.globalgrupp.greenlight.controller;
 
 import com.globalgrupp.greenlight.model.LoadedFile;
 import com.globalgrupp.greenlight.model.User;
+import com.globalgrupp.greenlight.model.UserCredentials;
 import com.globalgrupp.greenlight.util.HibernateUtil;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
@@ -98,6 +99,31 @@ public Long convert(InputStream file){
         session.beginTransaction();
         session.save(fUser);
         session.getTransaction().commit();
+    }
+
+
+    @RequestMapping(value="/authorize", method=RequestMethod.POST)
+    public String authorize(@RequestBody UserCredentials userCredentials){
+        Session session= HibernateUtil.getSessionFactory().openSession();
+        Query query=session.createQuery("from UserCredentials where login=:login");
+        query.setParameter("login",userCredentials.getLogin());
+        List<UserCredentials> userCredentialsList=query.list();
+        if (userCredentialsList.size()==0 && userCredentials.isNewUser()){
+            session.beginTransaction();
+            session.save(userCredentials);
+            session.getTransaction().commit();
+        }else if (userCredentialsList.size()>0 &&userCredentials.isNewUser()){
+            return "Пользователь с таким именем уже существует";
+        } else if (userCredentialsList.size()==0){
+            return "Поле логин и/или пароль не заполнены или заполнены не правильно";
+        } else {
+            UserCredentials bdUser=userCredentialsList.get(0);
+            if (bdUser.getPassword().equals(userCredentials.getPassword())){
+                return null;
+            }else return "Поле логин и/или пароль не заполнены или заполнены не правильно";
+        }
+        return null;
+
     }
 
 }

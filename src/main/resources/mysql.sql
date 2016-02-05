@@ -167,6 +167,13 @@ CREATE TABLE `greenlight`.`comment_photo` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
+CREATE TABLE `greenlight`.`user_credentials` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `login` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`));
+
+
 
 
 
