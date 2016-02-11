@@ -72,6 +72,29 @@ public class Comment {
     @Column(name="video_id")
     private Long videoId;
 
+    @Column(name="social_type")
+    private Long socialType;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Long getSocialType() {
+        return socialType;
+    }
+
+    public void setSocialType(Long socialType) {
+        this.socialType = socialType;
+    }
+
+    @Column(name="user_name")
+    private String userName;
+
+
 
 
     public Date getCreateDate() {

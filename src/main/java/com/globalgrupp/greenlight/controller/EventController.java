@@ -50,6 +50,10 @@ public class EventController {
             event.setUser(owner);
         } else{
             //wtf
+            User owner=new User();
+            owner.setPushAppId(event.getSenderAppId());
+            session.save(owner);
+            event.setUser(owner);;
         }
 
         session.save(event);

@@ -121,6 +121,29 @@ public class Event {
     @Column(name="photo_id")
     private List<Long> photoIds;
 
+
+    @Column(name="social_type")
+    private Long socialType;
+
+    @Column(name="user_name")
+    private String userName;
+
+    public Long getSocialType() {
+        return socialType;
+    }
+
+    public void setSocialType(Long socialType) {
+        this.socialType = socialType;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public List<Long> getPhotoIds() {
         return photoIds;
     }
