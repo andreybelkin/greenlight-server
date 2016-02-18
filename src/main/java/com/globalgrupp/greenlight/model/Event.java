@@ -73,6 +73,17 @@ public class Event {
     @Transient
     private String streetName;
 
+    public String getUniqueGUID() {
+        return uniqueGUID;
+    }
+
+    public void setUniqueGUID(String uniqueGUID) {
+        this.uniqueGUID = uniqueGUID;
+    }
+
+    @Column(name="unique_guid")
+    private String uniqueGUID;
+
     public String getStreetName() {
         return streetName;
     }

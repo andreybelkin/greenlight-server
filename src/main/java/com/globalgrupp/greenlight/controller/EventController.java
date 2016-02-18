@@ -28,9 +28,18 @@ public class EventController {
     @RequestMapping(value="/createEvent",method= RequestMethod.POST)
     boolean createEvent(@RequestBody Event event){
         Session session= HibernateUtil.getSessionFactory().openSession();
+        Query findEventQuery=session.createQuery("from Event where unique_guid=:guid");
+        findEventQuery.setParameter("guid",event.getUniqueGUID());
+        List<Event> eventsByGuid=findEventQuery.list();
+        if (eventsByGuid.size()>0){
+            return true; //такое сообщение уже есть
+        }
+
         session.beginTransaction();
-        Date dt=new Date();
-        event.setCreateDate(dt);
+        if (event.getCreateDate()==null){
+            Date dt=new Date();
+            event.setCreateDate(dt);
+        }
         String streetName= event.getStreetName();
         Query query= session.createQuery("from Street where street_name=:streetName ");
         query.setParameter("streetName",streetName);
@@ -56,6 +65,9 @@ public class EventController {
             event.setUser(owner);;
         }
 
+
+
+
         session.save(event);
         session.getTransaction().commit();
         Query usersQuery= session.createQuery("from User");
@@ -67,12 +79,13 @@ public class EventController {
                     Message message = new Message.Builder()
                             .addData("message",event.getMessage())
                             .addData("eventId",event.getId().toString())
+                            .addData("senderId",event.getSenderAppId())
                             .build();
                     List<String> usersList=new ArrayList<String>();
                     for(int i=0;i<users.size();i++){
                         String pushAppid=users.get(i).getPushAppId();
                         //не добавляем в рассылку отправителя
-                        if (pushAppid!=null && !pushAppid.isEmpty() && !pushAppid.equals(event.getSenderAppId())){
+                        if (pushAppid!=null && !pushAppid.isEmpty()){// && !pushAppid.equals(event.getSenderAppId())){
                             usersList.add(users.get(i).getPushAppId());
                         }
                     }
