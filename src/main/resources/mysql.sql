@@ -182,6 +182,8 @@ ALTER TABLE `greenlight`.`comment`
 ADD COLUMN `social_type` INT(11) NULL AFTER `video_id`,
 ADD COLUMN `user_name` VARCHAR(400) NULL AFTER `social_type`;
 
+ALTER TABLE `greenlight`.`event`
+ADD COLUMN `unique_guid` VARCHAR(45) NULL AFTER `user_name`;
 
 
 
