@@ -36,10 +36,11 @@ public class EventController {
         }
 
         session.beginTransaction();
-        if (event.getCreateDate()==null){
+        if (event.getCreateDate()!=null){
             Date dt=new Date();
             event.setCreateDate(dt);
         }
+
         String streetName= event.getStreetName();
         Query query= session.createQuery("from Street where street_name=:streetName ");
         query.setParameter("streetName",streetName);
@@ -64,11 +65,11 @@ public class EventController {
             session.save(owner);
             event.setUser(owner);;
         }
+
         session.save(event);
         session.getTransaction().commit();
         Query usersQuery= session.createQuery("from User");
         final List<User> users=usersQuery.list();
-        session.close();
         Thread thread = new Thread(){
             public void run(){
                 try{
@@ -87,15 +88,17 @@ public class EventController {
                         }
                     }
                     MulticastResult result = sender.send(message, usersList, 5);
+
                 } catch (Exception e){
                     e.printStackTrace();
+
                 }
             }
         };
 
         thread.start();
         return true;//
-
+        //session.close();
     }
 
 
@@ -169,6 +172,7 @@ public class EventController {
             }
         }
         //str=str.substring(0,str.length()-1);
+
         return result;
     }
 
@@ -180,7 +184,6 @@ public class EventController {
         session.beginTransaction();
         session.save(comment);
         session.getTransaction().commit();
-        session.close();
     }
 
     @RequestMapping(value="/getComments",method= RequestMethod.GET)
