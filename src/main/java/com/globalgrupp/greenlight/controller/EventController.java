@@ -64,14 +64,11 @@ public class EventController {
             session.save(owner);
             event.setUser(owner);;
         }
-
-
-
-
         session.save(event);
         session.getTransaction().commit();
         Query usersQuery= session.createQuery("from User");
         final List<User> users=usersQuery.list();
+        session.close();
         Thread thread = new Thread(){
             public void run(){
                 try{
@@ -90,16 +87,15 @@ public class EventController {
                         }
                     }
                     MulticastResult result = sender.send(message, usersList, 5);
-
                 } catch (Exception e){
                     e.printStackTrace();
-
                 }
             }
         };
+
         thread.start();
         return true;//
-        //session.close();
+
     }
 
 
@@ -115,7 +111,7 @@ public class EventController {
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.DAY_OF_YEAR, -1);
         Date dt=cal.getTime();
-        Query query= session.createQuery("from Event where create_date>:dt order by create_date desc");
+        Query query= session.createQuery("from Event where create_date>:dt and deleted<>1 order by create_date desc");
         query.setParameter("dt",dt);
 //        where longitude-1<=:longitude and longitude+1>:longitude " +
 //                " and latitude-1<=:latitude and latitude+1>=:latitude");
@@ -159,7 +155,7 @@ public class EventController {
         Date dt=cal.getTime();
         for (int i=0;i<streets.size();i++) {
             qwerty.add(streets.get(i).getId());
-            Query query= session.createQuery("from Event where create_date>:dt and first_street_id in (:streetList)  ");
+            Query query= session.createQuery("from Event where create_date>:dt and first_street_id in (:streetList) and deleted<>1  ");
             query.setParameter("streetList",streets.get(i).getId());
             query.setParameter("dt",dt);
             result.addAll(query.list());
@@ -173,7 +169,6 @@ public class EventController {
             }
         }
         //str=str.substring(0,str.length()-1);
-
         return result;
     }
 
@@ -185,6 +180,7 @@ public class EventController {
         session.beginTransaction();
         session.save(comment);
         session.getTransaction().commit();
+        session.close();
     }
 
     @RequestMapping(value="/getComments",method= RequestMethod.GET)
@@ -226,6 +222,19 @@ public class EventController {
                 res.setStreetName(res.getFirstStreet().getName());
             }
         }
+
         return result;
     }
+
+    @RequestMapping(value="/delete/{eventId}",method=RequestMethod.POST)
+    public void deleteEvent(@PathVariable("eventId") Long eventId ){
+        Session session= HibernateUtil.getSessionFactory().openSession();
+        Event event=(Event) session.get(Event.class,eventId);
+        session.beginTransaction();
+        event.setDeleted(true);
+        session.save(event);
+        session.getTransaction().commit();
+
+    }
+
 }

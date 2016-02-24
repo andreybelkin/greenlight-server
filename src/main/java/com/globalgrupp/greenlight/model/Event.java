@@ -1,5 +1,7 @@
 package com.globalgrupp.greenlight.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -138,6 +140,18 @@ public class Event {
 
     @Column(name="user_name")
     private String userName;
+
+    @Column(name="deleted")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public Long getSocialType() {
         return socialType;
