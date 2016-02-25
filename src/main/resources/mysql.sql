@@ -185,9 +185,46 @@ ADD COLUMN `user_name` VARCHAR(400) NULL AFTER `social_type`;
 ALTER TABLE `greenlight`.`event`
 ADD COLUMN `unique_guid` VARCHAR(45) NULL AFTER `user_name`;
 
-
 ALTER TABLE `greenlight`.`event`
 ADD COLUMN `deleted` TINYINT(1) NULL AFTER `unique_guid`;
+
+CREATE TABLE `greenlight`.`group` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(400) NOT NULL,
+  `group_type` INT NOT NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `greenlight`.`social_network_user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `social_network_user_id` INT NULL,
+  `social_network_id` INT NULL,
+  `user_name` VARCHAR(400) NULL,
+  PRIMARY KEY (`id`));
+
+CREATE TABLE `group_social_network_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `social_network_user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_GROUP_ID_idx` (`group_id`),
+  KEY `FK_social_network_user_id_idx` (`social_network_user_id`),
+  CONSTRAINT `FK_GROUP_ID` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_social_network_user_id` FOREIGN KEY (`social_network_user_id`) REFERENCES `social_network_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+)
+
+ALTER TABLE `greenlight`.`group`
+RENAME TO  `greenlight`.`groups` ;
+
+CREATE TABLE `greenlight`.`social_network` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(200) NULL,
+  PRIMARY KEY (`id`));
+
+ALTER TABLE `greenlight`.`social_network_user`
+CHANGE COLUMN `social_network_user_id` `social_network_user_id` BIGINT(20) NULL DEFAULT NULL ;
+
+
+
 
 
 
