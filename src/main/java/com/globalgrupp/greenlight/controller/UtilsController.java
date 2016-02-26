@@ -63,25 +63,25 @@ public Long convert(InputStream file){
     }
 
 
-    @RequestMapping(value="/savePushAppId/{appId}", method=RequestMethod.POST)
-    public void savePushAppId(@PathVariable("appId") String pushAppId){
-        Session session= HibernateUtil.getSessionFactory().openSession();
-        Query query=session.createQuery("from User where push_app_id=:pushAppId");
-        query.setParameter("pushAppId",pushAppId);
-        List<User> users=query.list();
-        User fUser;
-        if (users.size()==1){
-            fUser=users.get(0);
-            //такой ключ уже есть
-        } else {
-            fUser=new User();
-            fUser.setPushAppId(pushAppId);
-            session.beginTransaction();
-            session.save(fUser);
-            session.getTransaction().commit();
-        }
-    }
-    @RequestMapping(value="/savePushAppId/oldId={oldAppId}&newId={newAppId}", method=RequestMethod.GET)
+//    @RequestMapping(value="/savePushAppId/{appId}", method=RequestMethod.POST)
+//    public void savePushAppId(@PathVariable("appId") String pushAppId){
+//        Session session= HibernateUtil.getSessionFactory().openSession();
+//        Query query=session.createQuery("from User where push_app_id=:pushAppId");
+//        query.setParameter("pushAppId",pushAppId);
+//        List<User> users=query.list();
+//        User fUser;
+//        if (users.size()==1){
+//            fUser=users.get(0);
+//            //такой ключ уже есть
+//        } else {
+//            fUser=new User();
+//            fUser.setPushAppId(pushAppId);
+//            session.beginTransaction();
+//            session.save(fUser);
+//            session.getTransaction().commit();
+//        }
+//    }
+    @RequestMapping(value="/savePushAppId/oldId={oldAppId}&newId={newAppId}", method=RequestMethod.POST)
     public void updatePushAppId(@PathVariable("oldAppId") String oldAppId, @PathVariable("newAppId") String newAppId){
         Session session= HibernateUtil.getSessionFactory().openSession();
         Query query=session.createQuery("from User where push_app_id=:pushAppId");
