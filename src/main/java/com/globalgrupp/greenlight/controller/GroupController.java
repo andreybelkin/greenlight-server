@@ -57,7 +57,7 @@ public class GroupController {
 
     @RequestMapping(value = "/getUsers",method = RequestMethod.POST)
     List<SocialNetworkUser> getUsers(@RequestBody UsersFilter filter){
-        String queryString="from SocialNetworkUser where user_name like '%:userName%' and ";
+        String queryString="from SocialNetworkUser where user_name like '%:userName%' ";
         String cs="(";
         if (filter.isFbUser()){
             cs+=" social_network_id=2 ";
@@ -71,7 +71,10 @@ public class GroupController {
             cs+=" social_network_id=3 ";
         }
         cs+=")";
-        queryString+=cs;
+        if (filter.isFbUser()||filter.isTwUser()||filter.isVkUser()){
+            queryString+=" and "+cs;
+        }
+
         Session session=HibernateUtil.getSessionFactory().openSession();
         Query usersQuery=session.createQuery(queryString);
         List<SocialNetworkUser> users=usersQuery.list();
