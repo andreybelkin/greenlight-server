@@ -8,7 +8,6 @@ public class UsersFilter {
     private String name;
 
     private boolean fbUser;
-    
 
     private boolean vkUser;
 
