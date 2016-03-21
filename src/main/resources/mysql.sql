@@ -210,7 +210,7 @@ CREATE TABLE `group_social_network_user` (
   KEY `FK_social_network_user_id_idx` (`social_network_user_id`),
   CONSTRAINT `FK_GROUP_ID` FOREIGN KEY (`group_id`) REFERENCES `group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_social_network_user_id` FOREIGN KEY (`social_network_user_id`) REFERENCES `social_network_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-)
+);
 
 ALTER TABLE `greenlight`.`group`
 RENAME TO  `greenlight`.`groups` ;

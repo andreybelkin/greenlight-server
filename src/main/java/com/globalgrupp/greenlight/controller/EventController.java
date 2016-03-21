@@ -9,6 +9,7 @@ import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -41,16 +42,18 @@ public class EventController {
             event.setCreateDate(dt);
         }
 
-        String streetName= event.getStreetName();
-        Query query= session.createQuery("from Street where street_name=:streetName ");
-        query.setParameter("streetName",streetName);
-        List<Street> streets=query.list();
-        if (streets.size()==0){
-            Street newStreet=new Street(streetName);
-            session.save(newStreet);
-            event.setFirstStreet(newStreet);
-        } else {
-            event.setFirstStreet(streets.get(0));
+        String streetName = event.getStreetName();
+        if (!StringUtils.isEmpty(streetName)) {
+            Query query = session.createQuery("from Street where street_name = :streetName");
+            query.setParameter("streetName", streetName);
+            List<Street> streets = query.list();
+            if (streets.size() == 0) {
+                Street newStreet = new Street(streetName);
+                session.save(newStreet);
+                event.setFirstStreet(newStreet);
+            } else {
+                event.setFirstStreet(streets.get(0));
+            }
         }
         Query ownerUserQuery= session.createQuery("from User where push_app_id=:pushAppId");
         ownerUserQuery.setParameter("pushAppId",event.getSenderAppId());
